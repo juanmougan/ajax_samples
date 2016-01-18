@@ -18,13 +18,15 @@
   <script type="text/javascript">
       $('#submit_form').click( function(event){
         var formData = $('#my_form').serialize();
-        console.log(formData);
+        var jsonData = JSON.stringify(formData);
+        console.log("formData: " + formData);
+        console.log("jsonData: " + jsonData);
         $.ajax({
           url: 'http://localhost:4567/pedidos/guardar',
           type: 'POST',
           dataType: 'json',
           contentType: 'application/json',
-          data:  formData,
+          data:  jsonData,
           success: function(event){
             console.log("Event is: " + event);
             alert( "Data saved: " + event );

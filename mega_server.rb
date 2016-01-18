@@ -20,7 +20,7 @@ end
 
 post '/pedidos/guardar' do
   #{}"I got #{params[:person_name]}."
-  @pedidos << params[:person_name]
-  #{ :person_name => "#{params[:person_name]}" }.to_json
-  @pedidos
+  #@pedidos << params[:person_name]
+  { :person_name => "#{params[:person_name]}" }.to_json
+  #@pedidos
 end
