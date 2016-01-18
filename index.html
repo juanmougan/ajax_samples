@@ -10,19 +10,27 @@
     Amount:<br>
     <input type="text" name="amount">
     <br>
-    <input type="submit" value="Submit" id="submit_form">
+    <input type="button" value="Submit" id="submit_form">
   </form>
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
   <script type="text/javascript">
-      $('#submit_form').click( function(event) {
-        $.post( 'http://localhost:4567/pedidos/guardar', $('#my_form').serialize(), function(data) {
-          // ... do something with response from server
-            alert( "Data saved: " + data );
-          },
-        'json' // I expect a JSON response
-        );
-      event.preventDefault();
-    });
+      $('#submit_form').click( function(event){
+        var formData = $('#my_form').serialize();
+        console.log(formData);
+        $.ajax({
+          url: 'http://localhost:4567/pedidos/guardar',
+          type: 'POST',
+          dataType: 'json',
+          contentType: 'application/json',
+          data:  formData,
+          success: function(event){
+            console.log("Event is: " + event);
+            alert( "Data saved: " + event );
+          }
+        });
+      });
   </script>
 </body>
 </html>
