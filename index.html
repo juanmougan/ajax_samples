@@ -6,9 +6,11 @@
 <body>
   <form id="my_form" action="http://localhost:4567/pedidos/guardar" method="POST">
     Name:<br>
-    <input type="text" name="person_name"><br>
+    <input type="text" name="person_name" id="person_name_form"><br>
     Amount:<br>
-    <input type="text" name="amount">
+    <input type="text" name="amount" id="amount_form"><br>
+    Discount:<br>
+    <input type="text" name="discount" id="discount_form">
     <br>
     <input type="button" value="Submit" id="submit_form">
   </form>
@@ -16,22 +18,69 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
   <script type="text/javascript">
+    function isInt(value) {
+      var er = /^-?[0-9]+$/;
+      return er.test(value);
+    }
+
+    function isNull(ndefined) {
+      return typeof ndefined === 'undefined' || ndefined == null;
+    }
+
+    function validateDiscount() {
+      var discountStr = $("#discount_form").val();
+      var isDiscountInt = isInt(discountStr);
+      var isDiscountNotNull = !isNull(discountStr);
+      var isDiscountOk = true;
+      if (!isDiscountNotNull) {
+        isDiscountOk = isDiscountInt;
+      };
+
+      return isDiscountOk;
+    }
+
+    function validateForm() {
+
+      var isDiscountOk = validateDiscount();
+
+      var nameLength = $("#person_name_form").val().length;
+      var isNameLessThan100 = nameLength < 100;
+
+      var amountStr = $("#amount_form").val();
+      var isAmountNotNull = !isNull(amountStr);
+      var amount = parseInt(amountStr);
+      var isAmountInt = isInt(amountStr);
+
+      return isDiscountOk && isNameLessThan100 && isAmountNotNull && isAmountInt;
+      
+    }
+
+
+  </script>
+
+  <script type="text/javascript">
       $('#submit_form').click( function(event){
-        var formData = $('#my_form').serialize();
-        var jsonData = JSON.stringify(formData);
-        console.log("formData: " + formData);
-        console.log("jsonData: " + jsonData);
-        $.ajax({
-          url: 'http://localhost:4567/pedidos/guardar',
-          type: 'POST',
-          dataType: 'json',
-          contentType: 'application/json',
-          data:  jsonData,
-          success: function(event){
-            console.log("Event is: " + event);
-            alert( "Data saved: " + event );
-          }
-        });
+
+        if (validateForm()) {
+
+          var formData = $('#my_form').serialize();
+          // var jsonData = JSON.stringify($('#my_form'));
+          console.log("Data to be posted: " + formData);
+          $.ajax({
+            url: 'http://localhost:4567/pedidos/guardar',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data:  formData
+          }).done(function(data) {
+            console.log(" - - - - - - - - - - - - -Data saved - - - - - - - - - - - - -" + data);
+            console.dir(data);
+          });
+
+        } else {
+          alert("Validation failed");
+        }
+        
       });
   </script>
 </body>
