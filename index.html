@@ -12,7 +12,8 @@
     Discount:<br>
     <input type="text" name="discount" id="discount_form">
     <br>
-    <input type="button" value="Submit" id="submit_form">
+    <input type="button" value="Submit" id="submit_form"><br>
+    <button type="reset" value="Reset">Reset</button>
   </form>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -39,19 +40,30 @@
       return isDiscountOk;
     }
 
+    function validateName() {
+      var nameStr = $("#person_name_form").val();
+      var nameLength = nameStr.length;
+      var nameNull = isNull(nameStr);
+      var isNameLessThan100 = nameLength < 100;
+      if (nameNull || nameLength == 0) {
+        return false;
+      };
+
+      return isNameLessThan100;
+    }
+
     function validateForm() {
 
       var isDiscountOk = validateDiscount();
 
-      var nameLength = $("#person_name_form").val().length;
-      var isNameLessThan100 = nameLength < 100;
+      var isNameOk = validateName();
 
       var amountStr = $("#amount_form").val();
       var isAmountNotNull = !isNull(amountStr);
       var amount = parseInt(amountStr);
       var isAmountInt = isInt(amountStr);
 
-      return isDiscountOk && isNameLessThan100 && isAmountNotNull && isAmountInt;
+      return isDiscountOk && isNameOk && isAmountNotNull && isAmountInt;
       
     }
 
