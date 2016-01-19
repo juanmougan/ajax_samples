@@ -31,10 +31,12 @@
     function validateDiscount() {
       var discountStr = $("#discount_form").val();
       var isDiscountInt = isInt(discountStr);
+      console.log("discount " + discountStr)
       var isDiscountNotNull = !isNull(discountStr);
       var isDiscountOk = true;
-      if (!isDiscountNotNull) {
-        isDiscountOk = isDiscountInt;
+      if (isDiscountNotNull && discountStr.length > 0) {
+        console.log("not null discount");
+        isDiscountOk = isDiscountInt;   // will validate then
       };
 
       return isDiscountOk;
