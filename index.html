@@ -16,6 +16,10 @@
     <button type="reset" value="Reset">Reset</button>
   </form>
 
+  <div id="result_div" style="display: none;">
+    
+  </div>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
   <script type="text/javascript">
@@ -69,6 +73,17 @@
       
     }
 
+    function getFormData($form) {
+      var unindexed_array = $form.serializeArray();
+      var indexed_array = {};
+
+      $.map(unindexed_array, function(n, i){
+          indexed_array[n['name']] = n['value'];
+      });
+
+      return indexed_array;
+    }
+
 
   </script>
 
@@ -77,9 +92,16 @@
 
         if (validateForm()) {
 
-          var formData = $('#my_form').serialize();
-          // var jsonData = JSON.stringify($('#my_form'));
+          var $form = $("#my_form");
+          var formData = getFormData($form);
+
+          // var formData = $('#my_form').serialize();
+          // var formData = $('#my_form').serializeArray();
+          console.log("My form: " + $('#my_form'));
           console.log("Data to be posted: " + formData);
+          formData = JSON.stringify(formData);
+          // var jsonData = JSON.stringify($('#my_form'));
+          console.dir(formData);
           $.ajax({
             url: 'http://localhost:4567/pedidos/guardar',
             type: 'POST',
@@ -88,7 +110,12 @@
             data:  formData
           }).done(function(data) {
             console.log(" - - - - - - - - - - - - -Data saved - - - - - - - - - - - - -" + data);
+            data = JSON.stringify(data);
             console.dir(data);
+            var savedObjectAsParagraph = "<p>" + data + "</p>";
+            console.log("Paragraph: " + savedObjectAsParagraph);
+            $('#result_div').append(savedObjectAsParagraph);
+            $('#result_div').show();
           });
 
         } else {

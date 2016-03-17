@@ -38,3 +38,15 @@ post '/pedidos/guardar' do
   						:discount => "#{request_payload["discount"]}" }.to_json
   return received_params
 end
+
+post '/pedidos/guardarQueryParams' do
+  puts "First name: #{params["person_name"]}"
+  puts "Amount: #{params["amount"]}"
+  puts "Discount: #{params["discount"]}"
+  return
+
+  received_params = { :person_name => "#{params["person_name"]}", 
+              :amount => "#{params["amount"]}",
+              :discount => "#{params["discount"]}" }.to_json
+  return received_params
+end
